@@ -26,8 +26,8 @@ Page({
     if (app.globalData.selectedPreset) {
       this.loadPreset(app.globalData.selectedPreset)
       app.globalData.selectedPreset = null
-    } else {
-      // 首次加载，使用默认预设
+    } else if (this.data.options.length === 0) {
+      // 首次加载且没有数据时，使用默认预设
       let presets = getPresets()
       if (presets.length === 0) {
         // 没有预设时，创建默认预设
@@ -36,17 +36,18 @@ Page({
       }
       this.loadPreset(presets[0])
     }
+    // 如果已经有数据（options.length > 0）且没有新选择的预设，保持当前转盘不变
   },
 
   // 创建默认预设
   createDefaultPreset() {
     const defaultOptions = [
-      { label: '火锅' },
-      { label: '烧烤' },
-      { label: '日料' },
-      { label: '韩餐' },
-      { label: '川菜' },
-      { label: '粤菜' }
+      { label: '火锅', probability: null },
+      { label: '烧烤', probability: null },
+      { label: '日料', probability: null },
+      { label: '韩餐', probability: null },
+      { label: '川菜', probability: null },
+      { label: '粤菜', probability: null }
     ]
     return {
       id: Date.now(),
@@ -58,6 +59,46 @@ Page({
   // 计算属性
   angleStep() {
     return 360 / this.data.options.length
+  },
+
+  // 获取选项的概率（百分比转小数）
+  getOptionProbabilities() {
+    const options = this.data.options
+    const totalOptions = options.length
+
+    // 检查是否有自定义概率
+    const hasCustomProb = options.some(opt =>
+      opt.probability !== null &&
+      opt.probability !== undefined &&
+      !isNaN(opt.probability) &&
+      opt.probability > 0
+    )
+
+    if (!hasCustomProb) {
+      // 平均分配
+      return options.map(() => 1 / totalOptions)
+    }
+
+    // 计算自定义概率总和
+    let customSum = 0
+    let customCount = 0
+    options.forEach(opt => {
+      if (opt.probability !== null && opt.probability !== undefined && !isNaN(opt.probability)) {
+        customSum += opt.probability
+        customCount++
+      }
+    })
+
+    // 剩余概率平均分配给未设置的选项
+    const remainingOptions = totalOptions - customCount
+    const remainingProb = remainingOptions > 0 ? (100 - customSum) / remainingOptions / 100 : 0
+
+    return options.map(opt => {
+      if (opt.probability !== null && opt.probability !== undefined && !isNaN(opt.probability)) {
+        return opt.probability / 100
+      }
+      return remainingProb
+    })
   },
 
   // 更新转盘旋转样式
@@ -83,13 +124,17 @@ Page({
     if (!ctx) return
 
     const { size, radius, center, options } = this.data
-    const angleStep = (360 / options.length * Math.PI) / 180
+    const probabilities = this.getOptionProbabilities()
 
     ctx.clearRect(0, 0, size, size)
 
+    let currentAngle = -Math.PI / 2 // 从顶部开始
+
     options.forEach((item, index) => {
-      const start = index * angleStep - Math.PI / 2
-      const end = (index + 1) * angleStep - Math.PI / 2
+      const prob = probabilities[index]
+      const angleSize = prob * 2 * Math.PI // 概率对应的角度大小
+      const start = currentAngle
+      const end = currentAngle + angleSize
 
       // 绘制扇形
       ctx.beginPath()
@@ -100,7 +145,7 @@ Page({
       ctx.fill()
 
       // 在扇形中央绘制文字
-      const midAngle = start + angleStep / 2
+      const midAngle = start + angleSize / 2
       const textRadius = radius * 0.65
       const x = center + Math.cos(midAngle) * textRadius
       const y = center + Math.sin(midAngle) * textRadius
@@ -115,6 +160,8 @@ Page({
       ctx.textBaseline = 'middle'
       ctx.fillText(item.label, 0, 0)
       ctx.restore()
+
+      currentAngle = end
     })
 
     // 绘制中心小圆
@@ -148,25 +195,32 @@ Page({
       return
     }
 
-    const step = 360 / options.length
-    const threshold = 1
+    const probabilities = this.getOptionProbabilities()
 
-    // 生成目标指针角度，避开边界
-    let targetPointer
-    let attempts = 0
-    do {
-      targetPointer = Math.random() * 360
-      const remainder = targetPointer % step
-      if (remainder < threshold) {
-        targetPointer += threshold
-      } else if (remainder > step - threshold) {
-        targetPointer -= threshold
+    // 根据概率随机选择目标选项
+    const random = Math.random()
+    let cumulativeProb = 0
+    let targetIndex = 0
+    for (let i = 0; i < probabilities.length; i++) {
+      cumulativeProb += probabilities[i]
+      if (random <= cumulativeProb) {
+        targetIndex = i
+        break
       }
-      targetPointer = (targetPointer + 360) % 360
-      const newRemainder = targetPointer % step
-      if (newRemainder >= threshold && newRemainder <= step - threshold) break
-      attempts++
-    } while (attempts < 10)
+    }
+
+    // 计算目标选项的角度范围
+    let startAngle = 0
+    for (let i = 0; i < targetIndex; i++) {
+      startAngle += probabilities[i] * 360
+    }
+    const endAngle = startAngle + probabilities[targetIndex] * 360
+
+    // 在目标选项范围内随机选择一个角度（避开边界）
+    const threshold = 2 // 边界阈值
+    const range = endAngle - startAngle
+    let targetPointer = startAngle + threshold + Math.random() * (range - 2 * threshold)
+    targetPointer = (targetPointer + 360) % 360
 
     // 计算当前指针角度
     const currentPointer = ((-this.data.currentRotation) % 360 + 360) % 360
@@ -215,8 +269,20 @@ Page({
     let rawAngle = (-effectiveRotation) % 360
     if (rawAngle < 0) rawAngle += 360
 
-    const step = 360 / this.data.options.length
-    const index = Math.floor(rawAngle / step) % this.data.options.length
+    const probabilities = this.getOptionProbabilities()
+
+    // 根据概率计算当前角度对应的选项
+    let cumulativeAngle = 0
+    let index = 0
+    for (let i = 0; i < probabilities.length; i++) {
+      const angleSize = probabilities[i] * 360
+      if (rawAngle >= cumulativeAngle && rawAngle < cumulativeAngle + angleSize) {
+        index = i
+        break
+      }
+      cumulativeAngle += angleSize
+    }
+
     const selected = this.data.options[index]
     const result = `随机结果为：${selected.label}`
 
@@ -262,7 +328,8 @@ Page({
     const baseHue = Math.random() * 360
     const hueStep = 360 / options.length
     return options.map((opt, i) => ({
-      ...opt,
+      label: opt.label,
+      probability: opt.probability !== undefined ? opt.probability : null,
       color: `hsl(${Math.round((baseHue + i * hueStep) % 360)}, 70%, 60%)`
     }))
   },

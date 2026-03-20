@@ -25,7 +25,6 @@ Page({
 
   // 编辑预设
   editPreset(e) {
-    e.stopPropagation()
     const id = e.currentTarget.dataset.id
     wx.navigateTo({
       url: `/pages/edit/edit?id=${id}`
@@ -34,7 +33,6 @@ Page({
 
   // 删除预设
   deletePreset(e) {
-    e.stopPropagation()
     const id = e.currentTarget.dataset.id
     
     wx.showModal({

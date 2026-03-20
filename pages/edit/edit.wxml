@@ -16,6 +16,12 @@
       <button class="add-option-btn" bindtap="addOption">+ 添加</button>
     </view>
     
+    <view class="probability-info">
+      <text class="prob-hint">概率设置（留空则平均分配）</text>
+      <text class="prob-sum {{probabilityError ? 'error' : ''}}">当前总和: {{probabilitySum}}%</text>
+    </view>
+    <text wx:if="{{probabilityError}}" class="prob-error">{{probabilityError}}</text>
+    
     <view class="options-list">
       <view class="option-item" wx:for="{{preset.options}}" wx:key="index">
         <input 
@@ -25,6 +31,17 @@
           bindinput="onOptionChange"
           placeholder="选项内容"
         />
+        <view class="probability-input-wrapper">
+          <input 
+            class="probability-input"
+            value="{{item.probability !== null ? item.probability : ''}}"
+            data-index="{{index}}"
+            bindinput="onProbabilityChange"
+            placeholder="自动"
+            type="digit"
+          />
+          <text class="percent">%</text>
+        </view>
         <button class="delete-btn" bindtap="deleteOption" data-index="{{index}}">删除</button>
       </view>
     </view>

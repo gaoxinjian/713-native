@@ -30,7 +30,38 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
+}
+
+.probability-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+  padding: 0 4px;
+}
+
+.prob-hint {
+  font-size: 12px;
+  color: #7f8c8d;
+}
+
+.prob-sum {
+  font-size: 13px;
+  color: #27ae60;
+  font-weight: bold;
+}
+
+.prob-sum.error {
+  color: #e74c3c;
+}
+
+.prob-error {
+  display: block;
+  font-size: 12px;
+  color: #e74c3c;
+  margin-bottom: 8px;
+  padding: 0 4px;
 }
 
 .add-option-btn {
@@ -53,7 +84,7 @@
 .option-item {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   padding: 8px 0;
   border-bottom: 1px solid #f0f0f0;
 }
@@ -69,6 +100,31 @@
   padding: 10px 12px;
   font-size: 15px;
   border: 1px solid #e8e8e8;
+  min-width: 0;
+}
+
+.probability-input-wrapper {
+  display: flex;
+  align-items: center;
+  background: #f8f9fa;
+  border-radius: 6px;
+  border: 1px solid #e8e8e8;
+  padding: 0 8px;
+  width: 70px;
+}
+
+.probability-input {
+  width: 45px;
+  text-align: center;
+  font-size: 14px;
+  padding: 10px 0;
+  background: transparent;
+  border: none;
+}
+
+.percent {
+  font-size: 13px;
+  color: #7f8c8d;
 }
 
 .delete-btn {
