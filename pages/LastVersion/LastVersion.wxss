@@ -1,0 +1,22 @@
+/** pages/LastVersion/LastVersion.wxss **/
+.container {
+  min-height: 100vh;
+  background: linear-gradient(145deg, #f7f9fc 0%, #eef2f7 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 12px;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #7f8c8d;
+}

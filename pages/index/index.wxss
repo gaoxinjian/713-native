@@ -1,0 +1,137 @@
+/** pages/index/index.wxss **/
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(145deg, #f7f9fc 0%, #eef2f7 100%);
+  padding: 20px 0;
+  box-sizing: border-box;
+}
+
+.wheel-area {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  margin-bottom: 30px;
+}
+
+.wheel-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 300px;
+  height: 300px;
+  background: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.15), 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.wheel-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  will-change: transform;
+}
+
+/* 固定指针容器 */
+.pointer-container {
+  position: absolute;
+  top: 54%;
+  left: 50%;
+  transform: translate(-50%, -100%);
+  width: 24px;
+  height: 64px;
+  pointer-events: none;
+}
+
+/* 三角形 */
+.pointer-triangle {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-bottom: 40px solid #e74c3c;
+  filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.3));
+  z-index: 100;
+}
+
+/* 圆点 */
+.pointer-dot {
+  display: block;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 24px;
+  height: 24px;
+  background: #f1c40f;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  z-index: 101;
+}
+
+.info {
+  min-height: 50px;
+  margin: 10px 0 20px;
+  text-align: center;
+}
+
+.result {
+  font-size: 24px;
+  font-weight: bold;
+  color: #2c3e50;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 10px 25px;
+  border-radius: 50px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  display: inline-block;
+}
+
+.hint {
+  font-size: 18px;
+  color: #7f8c8d;
+  font-style: italic;
+}
+
+.spin-btn {
+  width: 220px;
+  height: 50px;
+  line-height: 50px;
+  background: #3498db !important;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  border-radius: 30px;
+  box-shadow: 0 8px 16px rgba(52, 152, 219, 0.4);
+  border: none;
+  margin-bottom: 30px;
+}
+
+.spin-btn[disabled] {
+  background: #bdc3c7 !important;
+  box-shadow: none;
+  opacity: 0.6;
+}
+
+.switch-btn {
+  width: 220px;
+  height: 50px;
+  line-height: 50px;
+  font-size: 20px;
+  font-weight: bold;
+  border-radius: 30px;
+  border: none;
+}
+
+.switch-btn::after {
+  border: none;
+}

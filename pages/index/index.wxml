@@ -1,0 +1,27 @@
+<!--pages/index/index.wxml-->
+<view class="container">
+  <view class="wheel-area">
+    <!-- 背景圆（不旋转） -->
+    <view class="wheel-bg"></view>
+    <!-- 转盘图片（旋转） -->
+    <image class="wheel-image" src="{{wheelImage}}" style="{{rotatorStyle}}" bindtransitionend="onTransitionEnd" wx:if="{{wheelImage}}"></image>
+    <!-- 固定指针 -->
+    <view class="pointer-container">
+      <view class="pointer-triangle"></view>
+      <view class="pointer-dot"></view>
+    </view>
+  </view>
+  <!-- 隐藏的 canvas 用于绘制 -->
+  <canvas canvas-id="wheelCanvas" id="wheelCanvas" style="position: fixed; left: -9999px; top: -9999px; width: {{size}}px; height: {{size}}px;"></canvas>
+
+  <view class="info">
+    <text class="result" wx:if="{{result}}">{{result}}</text>
+    <text class="hint" wx:else>点击下方按钮转转盘</text>
+  </view>
+
+  <button type="primary" bindtap="startSpin" disabled="{{animActive}}" class="spin-btn">
+    {{animActive ? '旋转中...' : '开始转'}}
+  </button>
+
+  <button type="default" bindtap="goToList" class="switch-btn">切换转盘</button>
+</view>

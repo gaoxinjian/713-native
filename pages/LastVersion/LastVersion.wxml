@@ -1,0 +1,5 @@
+<!--pages/LastVersion/LastVersion.wxml-->
+<view class="container">
+  <text class="title">历史版本</text>
+  <text class="subtitle">暂无历史版本记录</text>
+</view>

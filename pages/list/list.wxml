@@ -1,0 +1,27 @@
+<!--pages/list/list.wxml-->
+<view class="container">
+  <view class="header">
+    <text class="title">选择转盘</text>
+  </view>
+
+  <scroll-view class="preset-list" scroll-y>
+    <view 
+      class="preset-item" 
+      wx:for="{{presets}}" 
+      wx:key="id"
+      bindtap="selectPreset"
+      data-preset="{{item}}"
+    >
+      <view class="preset-info">
+        <text class="preset-name">{{item.name}}</text>
+        <text class="preset-count">{{item.options.length}} 个选项</text>
+      </view>
+      <view class="preset-actions">
+        <button class="action-btn edit" catchtap="editPreset" data-id="{{item.id}}">编辑</button>
+        <button class="action-btn delete" catchtap="deletePreset" data-id="{{item.id}}">删除</button>
+      </view>
+    </view>
+  </scroll-view>
+
+  <button class="add-btn" bindtap="addPreset">+ 新建转盘</button>
+</view>

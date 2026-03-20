@@ -1,0 +1,88 @@
+/** pages/list/list.wxss **/
+.container {
+  min-height: 100vh;
+  background: linear-gradient(145deg, #f7f9fc 0%, #eef2f7 100%);
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.preset-list {
+  flex: 1;
+  max-height: calc(100vh - 180px);
+}
+
+.preset-item {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.preset-info {
+  flex: 1;
+}
+
+.preset-name {
+  display: block;
+  font-size: 18px;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 4px;
+}
+
+.preset-count {
+  display: block;
+  font-size: 14px;
+  color: #7f8c8d;
+}
+
+.preset-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.action-btn {
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 16px;
+  border: none;
+  line-height: 1.5;
+}
+
+.action-btn.edit {
+  background: #3498db;
+  color: white;
+}
+
+.action-btn.delete {
+  background: #e74c3c;
+  color: white;
+}
+
+.add-btn {
+  width: 100%;
+  height: 50px;
+  line-height: 50px;
+  background: #27ae60;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 25px;
+  margin-top: 20px;
+  border: none;
+}
